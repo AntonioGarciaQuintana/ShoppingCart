@@ -1,0 +1,58 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>
+    Home
+  </h1>
+</div>
+
+<!-- Navigation -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-info fixed-top">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/home">ShoppingCar</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+      aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="about.html">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/chat" >chat</a>
+        </li> -->
+
+
+        <li class="nav-item active dropdown" *ngIf="isAdmin">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBlog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Menu administrator
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownBlog">
+            <a class="dropdown-item"  routerLink="/productManagement">CRUD product</a>
+          </div>
+        </li>
+
+        <li class="nav-item active dropdown">
+          <a class="nav-link " routerLink="/detailShopping"  id="idCarShopping" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-shopping-cart fa-lg" aria-hidden="true">({{numElements}})</i>
+          </a>
+        </li>
+
+        <li class="nav-item active dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="loginUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-user-circle-o fa-lg" aria-hidden="true"></i> {{userLogin?.fullName}}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="loginUser">
+                <a class="dropdown-item" routerLink="/login" *ngIf="!isLogged" > <i class="fa fa-sign-in" aria-hidden="true"></i> Login</a>
+              <a class="dropdown-item" *ngIf="isLogged" style="cursor: pointer;" (click)="onLogout()" > <i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
+            </div>
+          </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+
+  <router-outlet></router-outlet>
+  <ng-snotify></ng-snotify>
+</div>

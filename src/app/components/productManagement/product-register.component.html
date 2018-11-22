@@ -1,0 +1,139 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/Home">Home</a></li>
+    <li class="breadcrumb-item"><a routerLink="/productManagement">Product Management</a></li>
+    <li class="breadcrumb-item active">Product Register</li>
+</ol>
+
+<form [formGroup]="productFormGroup">
+
+    <h4>General Product</h4>
+    <hr>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="inputEmail4">Category *</label>
+            <select class="form-control" [formControl]="productFormGroup.controls.categoryControl">
+                <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+            </select>
+            <span class="text-danger align-middle" *ngIf="productFormGroup.controls.categoryControl.errors && (productFormGroup.controls.categoryControl.dirty || productFormGroup.controls.categoryControl.touched)"
+                style="Color: red;">
+                <i class="fa fa-close"></i> Obligatory field
+            </span>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="inputPassword4">Name *</label>
+            <input type="text" class="form-control" maxlength="100" formControlName="nameControl" id="txtProductName" placeholder="Product name">
+            <span class="text-danger align-middle" *ngIf="productFormGroup.controls.nameControl.errors && (productFormGroup.controls.nameControl.dirty || productFormGroup.controls.nameControl.touched)"
+                style="Color: red;">
+                <i class="fa fa-close"></i> Obligatory field
+            </span>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="inputPassword4">Price *</label>
+            <input type="text" appOnlyNumbers [maxlength]="10" [max]="100000" class="form-control" formControlName="priceControl"
+                id="txtProductPrice" placeholder="Product price">
+            <span class="text-danger align-middle" *ngIf="productFormGroup.controls.priceControl.errors?.required && (productFormGroup.controls.priceControl.dirty || productFormGroup.controls.priceControl.touched)"
+                style="Color: red;">
+                <i class="fa fa-close"></i> Obligatory field
+            </span>
+            <span class="text-danger align-middle" *ngIf="productFormGroup.controls.priceControl.errors?.pattern && (productFormGroup.controls.priceControl.dirty || productFormGroup.controls.priceControl.touched)"
+                style="Color: red;">
+                <i class="fa fa-close"></i> The field accept only two decimals
+            </span>
+        </div>
+
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputAddress">Stock *</label>
+            <input type="text" appOnlyNumbers class="form-control" formControlName="stockControl" id="txtProductStock"
+                placeholder="Product stock">
+            <span class="text-danger align-middle" *ngIf="productFormGroup.controls.stockControl.errors && (productFormGroup.controls.stockControl.dirty || productFormGroup.controls.stockControl.touched)"
+                style="Color: red;">
+                <i class="fa fa-close"></i> Obligatory field
+            </span>
+        </div>
+        <div class="form-group col-md-6">
+            <app-form-upload (documentSaved)="documentSaved($event)" [nameFile]="nameFile"></app-form-upload>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <textarea class="form-control" maxlength="500" formControlName="descriptionControl" id="txtProductDescription" rows="3"></textarea>
+        </div>
+    </div>
+
+    <div class="form-check col-md-4">
+        <input type="checkbox" class="form-check-input" formControlName="activeControl" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Active Product</label>
+    </div><br>
+
+
+    <!--Section book -->
+    <div *ngIf="showSectionBook">
+        <h4>Section Book</h4>
+        <hr>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="inputEmail4">ISBN *</label>
+                <input type="text" class="form-control" maxlength="100" formControlName="ISBNControl" id="txtBookISBN" placeholder="Book isbn">
+                <span class="text-danger align-middle" *ngIf="productFormGroup.controls.ISBNControl.errors && (productFormGroup.controls.ISBNControl.dirty || productFormGroup.controls.ISBNControl.touched)"
+                    style="Color: red;">
+                    <i class="fa fa-close"></i> Obligatory field
+                </span>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputPassword4">Title *</label>
+                <input type="text" class="form-control" maxlength="100" formControlName="titleBookControl" id="txtBookTile" placeholder="Book name">
+                <span class="text-danger align-middle" *ngIf="productFormGroup.controls.titleBookControl.errors && (productFormGroup.controls.titleBookControl.dirty || productFormGroup.controls.titleBookControl.touched)"
+                    style="Color: red;">
+                    <i class="fa fa-close"></i> Obligatory field
+                </span>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputPassword4">Author *</label>
+                <input type="text" class="form-control" maxlength="100" formControlName="authorBookControl" id="txtBookAuthor"
+                    placeholder="Author of book">
+                <span class="text-danger align-middle"  *ngIf="productFormGroup.controls.authorBookControl.errors && (productFormGroup.controls.authorBookControl.dirty || productFormGroup.controls.authorBookControl.touched)"
+                    style="Color: red;">
+                    <i class="fa fa-close"></i> Obligatory field
+                </span>
+            </div>
+
+        </div>
+    </div>
+    <!--Section movie -->
+    <div *ngIf="showSectionMovie">
+        <h4>Section Movie</h4>
+        <hr>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Classification *</label>
+                <select class="form-control" [formControl]="productFormGroup.controls.classificationControl">
+                    <option *ngFor="let classification of classifications" [value]="classification">{{ classification
+                        }}</option>
+                </select>
+                <span class="text-danger align-middle" *ngIf="productFormGroup.controls.classificationControl.errors && (productFormGroup.controls.classificationControl.dirty || productFormGroup.controls.classificationControl.touched)"
+                    style="Color: red;">
+                    <i class="fa fa-close"></i> Obligatory field
+                </span>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">Genre *</label>
+                <select class="form-control" [formControl]="productFormGroup.controls.genreControl">
+                    <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
+                </select>
+                <span class="text-danger align-middle" *ngIf="productFormGroup.controls.genreControl.errors && (productFormGroup.controls.genreControl.dirty || productFormGroup.controls.genreControl.touched)"
+                    style="Color: red;">
+                    <i class="fa fa-close"></i> Obligatory field
+                </span>
+            </div>
+
+
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="!productFormGroup.valid" (click)="onSaveProduct()">Save
+        Product</button>
+</form>

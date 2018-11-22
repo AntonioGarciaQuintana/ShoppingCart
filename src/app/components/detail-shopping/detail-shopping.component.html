@@ -1,0 +1,49 @@
+<h1>Detail shopping cart</h1>
+<hr>
+<div class="animated bounceInDown">
+    <div class="row">
+            <div class="col-lg-10 mb-1">
+                    <div class=" mb-2">
+                        <button class="btn btn-primary" *ngIf="productToBuy?.detailSale.length > 0" style="float: right" (click)="openConfirmationModal(confirmationModal)"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Buy Now</button>
+                    </div>
+                </div>
+    </div>
+       
+        <div class="row">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">No.</th>
+                            <th scope="col">SubTotal ${{productToBuy?.total}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of productToBuy?.detailSale">
+                            <th> <img class="rounded mx-auto d-block" style="width: 19%; height: 50%" src="data:image/JPEG;base64,{{ data.product.imageUrl }}"
+                                    alt=""> </th>
+                            <td>{{ data.product.name }}</td>
+                            <td>{{ data.numberProducts}}</td>
+                            <td>{{ data.subTotal | currency }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+</div>
+<ng-template #confirmationModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-title">Confirmation Message</h4>
+            <button type="button" class="close" aria-describedby="modal-title" (click)="closeModal()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p><strong>Are you sure you want to buy this products, the cost is <span class="text-primary">${{productToBuy?.total}}</span></strong></p>
+            
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancel</button>
+            <button type="button" class="btn btn-success" (click)="OnBuy()"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Yes</button>
+        </div>
+    </ng-template>

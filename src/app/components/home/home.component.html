@@ -1,0 +1,120 @@
+<!-- Page Heading/Breadcrumbs -->
+<h1 class="mt-4 mb-3">Welcome!!!
+    <!-- <small>Select a product and buy</small> -->
+</h1>
+<div class="row">
+    <div class="card-body">
+        <form [formGroup]="searchProductFormGroup">
+            <div class="form-row  align-items-center">
+                <div class="col-lg-1 mb-4">
+                    <label class="sr-only">Size page</label>
+                    <input type="text" appOnlyNumbers class="form-control mb-2" formControlName="defaultSizePage" id="txtSixePage"
+                        placeholder="Size">
+                </div>
+                <div class="col-lg-9 mb-4">
+                    <label class="sr-only">Search</label>
+                    <input type="text" class="form-control mb-2" formControlName="searchProducto" id="txtSearch"
+                        placeholder="Search product...">
+                </div>
+                <div class="col-lg-2 mb-4">
+                    <label class="sr-only">Category</label>
+                    <select class="form-control mb-2" [formControl]="searchProductFormGroup.controls.category">
+                        <option value="" selected>ALL</option>
+                        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="animated bounceInUp">
+    <div class="col-lg-12 mb-4">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4" *ngFor="let product of products | paginate: { itemsPerPage: pageSize, currentPage: currentPage, totalItems: totalElements }">
+                <div class="card h-100" (click)="openModalConfirmation(product,detailModal)" style="cursor: pointer">
+
+                    <img class="rounded mx-auto d-block" src="data:image/JPEG;base64,{{ product.imageUrl }}" alt="">
+                    <div class="card-body">
+                        <h4 class="card-title" style="color:blue">
+                            <p>{{ product.name }}</p>
+                        </h4>
+                        <h5>{{ product.price | currency}}</h5>
+                        <!-- <p class="card-text">{{ product.description}}</p> -->
+                    </div>
+                    <div class="card-footer">
+                        <span class="fa fa-star checkedStar"></span>
+                        <span class="fa fa-star checkedStar"></span>
+                        <span class="fa fa-star checkedStar"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <pagination-controls (pageChange)="currentPage = $event" previousLabel="previous" nextLabel="Next" (pageChange)="pageChanged($event)"></pagination-controls>
+    </div>
+</div>
+
+<ng-template #detailModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-title">Detail product</h4>
+        <button type="button" class="close" aria-describedby="modal-title" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <img class="rounded mx-auto d-block" src="data:image/JPEG;base64,{{ productSelected.imageUrl }}" alt="">
+            </div>
+        </div><br>
+        <div class="row">
+
+            <div class="col-md-3"><label for=""><b>Nombre:</b></label>
+                <p>{{productSelected.name}}</p>
+            </div>
+            <div class="col-md-3"><label for=""><b>Category:</b></label>
+                <p>{{productSelected.category}}</p>
+            </div>
+            <div class="col-md-3"><label for=""><b>Stock:</b></label>
+                <p>{{productSelected.stock}}</p>
+            </div>
+            <div class="col-md-3"><label for=""><b>Price:</b></label>
+                <p>{{productSelected.price | currency}}</p>
+            </div>
+        </div>
+        <div class="row" *ngIf="productSelected.category === 'BOOK'">
+            <div class="col-md-4"><label for=""><b>Title:</b></label>
+                <p>{{productSelected.title}}</p>
+            </div>
+            <div class="col-md-4"><label for=""><b>Author:</b></label>
+                <p>{{productSelected.author}}</p>
+            </div>
+            <div class="col-md-4"><label for=""><b>Isbn:</b></label>
+                <p>{{productSelected.isbn}}</p>
+            </div>
+
+        </div>
+        <div class="row" *ngIf="productSelected.category === 'MOVIE'">
+            <div class="col-md-6"><label for=""><b>Classification:</b></label>
+                <p>{{productSelected.classification}}</p>
+            </div>
+            <div class="col-md-6"><label for=""><b>Genre:</b></label>
+                <p>{{productSelected.genre}}</p>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-12"><label for=""><b>Description:</b></label>
+                <p>{{productSelected.description}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-success" (click)="addToCar(productSelected)"><i class="fa fa-cart-plus"
+                aria-hidden="true"></i> Add car</button>
+    </div>
+</ng-template>
