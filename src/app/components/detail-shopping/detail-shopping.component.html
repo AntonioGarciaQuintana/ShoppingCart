@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-lg-10 mb-1">
             <div class=" mb-2">
-                <button class="btn btn-primary" *ngIf="productToBuy?.detailSale.length > 0" style="float: right"
+                <button class="btn btn-primary" *ngIf="productToBuy?.detailSale?.length > 0" style="float: right"
                     (click)="openConfirmationModal(confirmationModal)"><i class="fa fa-shopping-cart" aria-hidden="true"></i>
                     Buy Now</button>
             </div>
