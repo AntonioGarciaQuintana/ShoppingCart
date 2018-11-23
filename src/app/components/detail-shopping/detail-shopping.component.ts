@@ -49,6 +49,7 @@ export class DetailShoppingComponent implements OnInit {
         } else {
              this.productToBuy = new Sale();
             this.shopping.update();
+            localStorage.removeItem('shoppingCar');
         }
     }
 
