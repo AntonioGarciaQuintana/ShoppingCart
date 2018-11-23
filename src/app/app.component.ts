@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
   }
 
   coutElements() {
-    if (localStorage.getItem('shoppingCar') !== null) {
+    if (localStorage.getItem('shoppingCar') !== null && localStorage.getItem('shoppingCar') !== '') {
       this.numElements = localStorage.getItem('shoppingCar').split(',').length;
     } else {
       this.numElements = 0;

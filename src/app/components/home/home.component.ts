@@ -162,7 +162,7 @@ export class HomeComponent implements OnInit {
             const ids = localStorage.getItem('shoppingCar');
             localStorage.setItem('shoppingCar',   ids + ',' + product.id  );
         }
-        this.shopping.addCar();
+        this.shopping.update();
 
         this.closeModal();
         this.notify.success('was add to shopping car the product: ' + product.name);

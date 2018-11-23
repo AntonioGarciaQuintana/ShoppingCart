@@ -34,7 +34,7 @@ export class DetailShoppingComponent implements OnInit {
     }
 
     getProductsByIds() {
-        if (localStorage.getItem('shoppingCar') !== null) {
+        if (localStorage.getItem('shoppingCar') !== null && localStorage.getItem('shoppingCar') !== '') {
             const idsProducts = localStorage.getItem('shoppingCar');
             this.apiService.getElement(this.urlProductController + '/getProductsByIds', idsProducts)
                 .subscribe(
@@ -46,6 +46,8 @@ export class DetailShoppingComponent implements OnInit {
                     }
                 );
 
+        } else {
+            this.shopping.update();
         }
     }
 

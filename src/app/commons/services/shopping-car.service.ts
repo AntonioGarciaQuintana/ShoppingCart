@@ -12,7 +12,7 @@ export class ShoppingCarServive {
 
    }
 
-   addCar() {
+   update() {
       this.addtoCarEmmiter.emit(null);
    }
 
