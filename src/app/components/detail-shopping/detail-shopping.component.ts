@@ -133,7 +133,7 @@ export class DetailShoppingComponent implements OnInit {
        localStorage.setItem('shoppingCar', ret.join(','));
       this.getProductsByIds();
       this.notify.success('The product was removed from the shpopping cart correctly');
-      this.shopping.addCar();
+      this.shopping.update();
     }
 
 }
