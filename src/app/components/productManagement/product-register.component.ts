@@ -54,7 +54,7 @@ export class RegisterProductComponent implements OnInit {
       genreControl: new FormControl('', Validators.required)
     });
 
-
+    this.productFormGroup.controls['activeControl'].setValue(true);
     this.getEnums();
     this.eventsControls();
   }

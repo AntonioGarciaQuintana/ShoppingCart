@@ -53,7 +53,7 @@ export class DetailShoppingComponent implements OnInit {
         this.productToBuy = new Sale();
         this.productToBuy.detailSale = [];
         this.productToBuy.user = this.authService.getUserLogged();
-        const ids = localStorage.getItem('shoppingCar').split('');
+        const ids = localStorage.getItem('shoppingCar').split(',');
         pruducts.forEach(prod => {
             const detailsale = new DetailSale();
             detailsale.product = prod;
@@ -120,6 +120,18 @@ export class DetailShoppingComponent implements OnInit {
                     this.notify.error('An error has occurred in save the sale');
                 }
             );
+    }
+
+
+    deleteProductOfCar(detailSale: DetailSale) {
+        const ids = localStorage.getItem('shoppingCar').split(',');
+        const ret = ids.filter(val => {
+            return +val !== detailSale.product.id;
+        });
+       localStorage.setItem('shoppingCar', ret.join(','));
+      this.getProductsByIds();
+      this.notify.success('The product was removed from the shpopping cart correctly');
+      this.shopping.addCar();
     }
 
 }

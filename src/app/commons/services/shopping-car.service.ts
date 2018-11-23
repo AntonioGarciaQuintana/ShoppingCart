@@ -12,8 +12,7 @@ export class ShoppingCarServive {
 
    }
 
-   addCar(product: Product) {
-      this.productList.push(product);
+   addCar() {
       this.addtoCarEmmiter.emit(null);
    }
 

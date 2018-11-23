@@ -54,7 +54,9 @@ export class HomeComponent implements OnInit {
             .valueChanges
             .debounceTime(800)
             .subscribe(res => {
-                this.firstPage();
+                if (res !== undefined && res !== null && +res !== 0) {
+                    this.firstPage();
+                }
             });
         this.searchProductFormGroup.get('searchProducto')
             .valueChanges
@@ -160,7 +162,7 @@ export class HomeComponent implements OnInit {
             const ids = localStorage.getItem('shoppingCar');
             localStorage.setItem('shoppingCar',   ids + ',' + product.id  );
         }
-        this.shopping.addCar(product);
+        this.shopping.addCar();
 
         this.closeModal();
         this.notify.success('was add to shopping car the product: ' + product.name);

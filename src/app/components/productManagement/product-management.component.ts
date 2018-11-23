@@ -1,8 +1,9 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Product } from '../../model/product';
 import { ApiService } from '../../commons/services/api-service.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NotifyService } from '../../commons/services/notify.service';
 
@@ -49,7 +50,9 @@ export class ProductManagementComponent implements OnInit {
             .valueChanges
             .debounceTime(800)
             .subscribe(res => {
-                this.firstPage();
+                if (res !== undefined && res !== null && +res !== 0) {
+                    this.firstPage();
+                }
             });
         this.searchProductFormGroup.get('searchProduct')
             .valueChanges

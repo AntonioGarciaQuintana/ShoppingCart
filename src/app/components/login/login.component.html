@@ -20,7 +20,61 @@
                 <i class="fa fa-close"></i>The password is obligatory field
             </span>
             <button class="btn btn-lg btn-primary btn-block" (click)="login()">Sign in</button>
-            <button class="btn btn-lg btn-success btn-block" type="submit">Register</button>
+            <button class="btn btn-lg btn-success btn-block" (click)="openRegisterUserModal(loginModal)" type="submit">Register</button>
         </form>
     </div>
 </div>
+
+<ng-template #loginModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-title">Register user</h4>
+        <button type="button" class="close" aria-describedby="modal-title" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+        <form [formGroup]="userForm">
+            <div class="form-group col-md-12">
+                <label>Nombre Completo</label>
+                <input type="text" name="name" maxlength="100" class="form-control" formControlName="registerFullName"
+                    placeholder="Nombre completo" />
+                <span class="text-danger align-middle" *ngIf="userForm.controls.registerFullName.errors && (userForm.controls.registerFullName.dirty || userForm.controls.registerFullName.touched)"
+                    style="Color: red;">
+                    <i class="fa fa-close"></i> Obligatory field
+                </span>
+            </div>
+
+
+            <div class="form-group col-md-12">
+                <label>Email</label>
+                <input type="text" autocomplete="off" name="registerusername" maxlength="50" class="form-control"
+                    formControlName="registerUsername" placeholder="Email" />
+                <div class="form-control-feedback">
+                    <span class="text-danger align-middle" *ngIf="userForm.controls.registerUsername.errors && (userForm.controls.registerUsername.dirty || userForm.controls.registerUsername.touched)">
+                        <i class="fa fa-close"></i> The email have a incorrect structure
+                    </span>
+                </div>
+            </div>
+
+
+            <div class="form-group col-md-12">
+                <label>Constraseña</label>
+                <input type="password" autocomplete="new-password" maxlength="20" name="name" class="form-control"
+                    formControlName="registerPassword" placeholder="Password" />
+                <span class="text-danger align-middle" *ngIf="userForm.controls.registerPassword.errors && (userForm.controls.registerPassword.dirty || userForm.controls.registerPassword.touched)"
+                    style="Color: red;">
+                    <i class="fa fa-close"></i> Obligatory field
+                </span>
+            </div>
+
+
+        </form>
+        <br>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-success" (click)="registerUser()"> Register user</button>
+    </div>
+</ng-template>
