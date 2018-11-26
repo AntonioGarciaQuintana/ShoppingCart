@@ -5,19 +5,18 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
-    "build": "ng build --prod",
+    "build": "ng serve",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "postinstall": "ng build --aot=prod"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
-    "@angular/cli": "~1.7.4",
-    "@angular/compiler-cli": "^5.2.11",
     "@angular/animations": "^5.2.0",
+    "@angular/cli": "~1.7.4",
     "@angular/common": "^5.2.0",
     "@angular/compiler": "^5.2.0",
+    "@angular/compiler-cli": "^5.2.11",
     "@angular/core": "^5.2.0",
     "@angular/forms": "^5.2.0",
     "@angular/http": "^5.2.0",
@@ -30,10 +29,11 @@
     "express": "^4.16.4",
     "font-awesome": "^4.7.0",
     "ng-snotify": "^4.3.1",
+    "ng4-loading-spinner": "^1.2.3",
     "ngx-pagination": "^3.2.1",
     "rxjs": "^5.5.6",
-    "zone.js": "^0.8.19",
-    "typescript": "~2.5.3"
+    "typescript": "~2.5.3",
+    "zone.js": "^0.8.19"
   },
   "devDependencies": {
     "@angular/cli": "~1.7.4",

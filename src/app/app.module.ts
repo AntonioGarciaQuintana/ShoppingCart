@@ -21,7 +21,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
 import { NotifyService } from './commons/services/notify.service';
 import { OnlyNumbersDirective } from './commons/directives/only-numbers.directive';
-
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 @NgModule({
   declarations: [
@@ -41,9 +41,10 @@ import { OnlyNumbersDirective } from './commons/directives/only-numbers.directiv
     FormsModule,
     ReactiveFormsModule,
     NgxPaginationModule,
-    NgbModule.forRoot(),
     SnotifyModule,
-    routing
+    routing,
+    NgbModule.forRoot(),
+    Ng4LoadingSpinnerModule.forRoot(),
   ],
   providers: [
     { provide: 'SnotifyToastConfig', useValue: ToastDefaults},

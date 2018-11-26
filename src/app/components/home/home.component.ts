@@ -6,6 +6,7 @@ import 'rxjs/add/operator/debounceTime';
 import { NgbModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NotifyService } from '../../commons/services/notify.service';
 import { ShoppingCarServive } from '../../commons/services/shopping-car.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 @Component({
     selector: 'app-home',
@@ -33,7 +34,8 @@ export class HomeComponent implements OnInit {
     constructor(private apiService: ApiService
         , private modalService: NgbModal
         , private notify: NotifyService
-        , private shopping: ShoppingCarServive) {
+        , private shopping: ShoppingCarServive
+        , private spinnerService: Ng4LoadingSpinnerService) {
     }
 
     ngOnInit(): void {
@@ -102,18 +104,22 @@ export class HomeComponent implements OnInit {
     }
 
     getPage(page: number) {
+
         if (this.searchProductFormGroup.controls['defaultSizePage'].value !== '') {
             this.pageSize = this.searchProductFormGroup.controls['defaultSizePage'].value;
             const search = this.searchProductFormGroup.controls['searchProducto'].value;
             const category = this.searchProductFormGroup.controls['category'].value;
+            this.spinnerService.show();
             this.apiService.getPagesSort(this.urlProductController + '/getPage', page, this.pageSize, this.sorting, search, category)
                 .subscribe(
                     result => {
                         this.products = result.content;
                         this.totalElements = result.totalElements;
+                        this.spinnerService.hide();
                     },
                     error => {
                         console.log(error);
+                        this.spinnerService.hide();
                     }
                 );
         }
