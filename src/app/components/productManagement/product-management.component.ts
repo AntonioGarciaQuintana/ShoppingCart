@@ -6,6 +6,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NotifyService } from '../../commons/services/notify.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 @Component({
     selector: 'app-product-management',
@@ -30,6 +31,7 @@ export class ProductManagementComponent implements OnInit {
         , private router: Router
         , private modalService: NgbModal
         , private notify: NotifyService
+        , private spinnerService: Ng4LoadingSpinnerService
     ) {
     }
 
@@ -91,14 +93,17 @@ export class ProductManagementComponent implements OnInit {
             this.pageSize = this.searchProductFormGroup.controls['defaultSizePage'].value;
             const search = this.searchProductFormGroup.controls['searchProduct'].value;
             const category = this.searchProductFormGroup.controls['category'].value;
+            this.spinnerService.show();
             this.apiService.getPagesSort(this.urlProductController + '/getPageAll', page, this.pageSize, this.sorting, search, category)
                 .subscribe(
                     result => {
                         this.products = result.content;
                         this.totalElements = result.totalElements;
+                        this.spinnerService.hide();
                     },
                     error => {
                         console.log(error);
+                        this.spinnerService.hide();
                     }
                 );
         }

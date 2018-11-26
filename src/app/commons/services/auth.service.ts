@@ -37,6 +37,7 @@ export class AuthService {
 
     logOut() {
         localStorage.clear();
+        localStorage.removeItem('shoppingCar');
         this.shoopingService.toLogout();
         return this.http.post(this.base.urlBackend + 'logout', {})
             .map((response: Response) => {

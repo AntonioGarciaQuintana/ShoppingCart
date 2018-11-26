@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '../../commons/services/api-service.service';
 import { Document } from '../../model/document';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 
 @Component({
@@ -29,7 +30,9 @@ export class RegisterProductComponent implements OnInit {
     private route: ActivatedRoute
     , private router: Router
     , private apiService: ApiService
-    , private notify: NotifyService) {
+    , private notify: NotifyService
+    , private spinnerService: Ng4LoadingSpinnerService
+    ) {
   }
 
   ngOnInit(): void {
@@ -210,6 +213,7 @@ export class RegisterProductComponent implements OnInit {
 
   onSaveProduct(): void {
     if (this.validationDocument()) {
+      this.spinnerService.show();
       const method = this.productFormGroup.controls['categoryControl'].value;
       this.apiService.addElement(this.urlProductController + (method === 'BOOK' ? '/saveProductBook' : '/saveProductMovie')
         , this.getObjectProduct(this.productFormGroup.value))
@@ -218,8 +222,10 @@ export class RegisterProductComponent implements OnInit {
             this.notify.success('The product saved correctly');
             this.onCancel();
             this.router.navigate(['/productManagement']);
+            this.spinnerService.hide();
           },
           error => {
+            this.spinnerService.hide();
             this.notify.error('Ha ocurrido un error al guardar el producto');
           }
         );

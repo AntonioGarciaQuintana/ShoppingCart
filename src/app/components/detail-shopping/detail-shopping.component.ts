@@ -1,3 +1,4 @@
+import { FormControl } from '@angular/forms';
 import { AuthService } from './../../commons/services/auth.service';
 import { DetailSale } from './../../model/detai-sale';
 import { Sale } from './../../model/sale';
@@ -8,6 +9,7 @@ import { NgbModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-boo
 import { NotifyService } from '../../commons/services/notify.service';
 import { Router } from '@angular/router';
 import { ShoppingCarServive } from '../../commons/services/shopping-car.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 @Component({
     selector: 'app-detail-shopping',
@@ -20,6 +22,7 @@ export class DetailShoppingComponent implements OnInit {
     urlProductController = '/product';
     modalRef: NgbModalRef;
     urlSaleController = '/sale';
+    numersProducrtsControl: FormControl = new FormControl('');
 
     constructor(
         private apiService: ApiService
@@ -27,15 +30,17 @@ export class DetailShoppingComponent implements OnInit {
         , private modalService: NgbModal
         , private notify: NotifyService
         , private shopping: ShoppingCarServive
-        , private authService: AuthService) {
+        , private authService: AuthService
+        , private spinnerService: Ng4LoadingSpinnerService
+    ) {
     }
     ngOnInit(): void {
         this.getProductsByIds();
     }
 
     getProductsByIds() {
-        if (localStorage.getItem('shoppingCar') !== null && localStorage.getItem('shoppingCar') !== '') {
-            const idsProducts = localStorage.getItem('shoppingCar');
+        if (this.shopping.haveProducts()) {
+            const idsProducts = this.shopping.getIdsProducts();
             this.apiService.getElement(this.urlProductController + '/getProductsByIds', idsProducts)
                 .subscribe(
                     result => {
@@ -47,9 +52,8 @@ export class DetailShoppingComponent implements OnInit {
                 );
 
         } else {
-             this.productToBuy = new Sale();
-            this.shopping.update();
-            localStorage.removeItem('shoppingCar');
+            this.productToBuy = new Sale();
+            this.shopping.deleteShoppingCart();
         }
     }
 
@@ -57,17 +61,15 @@ export class DetailShoppingComponent implements OnInit {
         this.productToBuy = new Sale();
         this.productToBuy.detailSale = [];
         this.productToBuy.user = this.authService.getUserLogged();
-        const ids = localStorage.getItem('shoppingCar').split(',');
+        const shoppingCart = this.shopping.getDetailSale();
         pruducts.forEach(prod => {
             const detailsale = new DetailSale();
             detailsale.product = prod;
-            let numbersProduct = 0;
-            ids.map(id => {
-                if (prod.id === +id) {
-                    numbersProduct++;
-                }
+            const ret = shoppingCart.find(detailSaleList => {
+                return detailSaleList.product.id === prod.id;
             });
-            detailsale.numberProducts = numbersProduct;
+            detailsale.numberProducts = ret.numberProducts;
+            detailsale.unitCost = prod.price;
             detailsale.subTotal = detailsale.product.price * detailsale.numberProducts;
             this.productToBuy.detailSale.push(detailsale);
         });
@@ -109,7 +111,7 @@ export class DetailShoppingComponent implements OnInit {
     }
 
     OnBuy() {
-
+        this.spinnerService.show();
         this.apiService.addElement(this.urlSaleController + '/saveSale', this.productToBuy)
             .subscribe(
                 result => {
@@ -118,8 +120,10 @@ export class DetailShoppingComponent implements OnInit {
                     this.router.navigate(['/home']);
                     this.shopping.tobuy();
                     this.closeModal();
+                    this.spinnerService.hide();
                 },
                 error => {
+                    this.spinnerService.hide();
                     console.error(error);
                     this.notify.error('An error has occurred in save the sale');
                 }
@@ -127,15 +131,46 @@ export class DetailShoppingComponent implements OnInit {
     }
 
 
-    deleteProductOfCar(detailSale: DetailSale) {
-        const ids = localStorage.getItem('shoppingCar').split(',');
-        const ret = ids.filter(val => {
-            return +val !== detailSale.product.id;
+    deleteProductOfCar(product: Product) {
+        this.shopping.removeProductShoppingCart(product);
+        this.getProductsByIds();
+        this.notify.success('The product was removed from the shpopping cart correctly');
+    }
+
+    deleteAll() {
+        localStorage.removeItem('shoppingCar');
+    }
+
+    onRest(detailSale: DetailSale) {
+        if (detailSale.numberProducts > 1) {
+            this.shopping.updateNumberProduct(detailSale.product.id, --detailSale.numberProducts);
+            this.recalculePrice();
+        }
+    }
+    onSum(detailSale: DetailSale) {
+        if (detailSale.numberProducts < 999) {
+            this.shopping.updateNumberProduct(detailSale.product.id, ++detailSale.numberProducts);
+            this.recalculePrice();
+        }
+    }
+
+    onChangeNumberProducts(numbers: number, product: Product) {
+        if ((+numbers > 0)) {
+            this.shopping.updateNumberProduct(product.id, +numbers);
+            this.recalculePrice();
+        }
+    }
+
+    recalculePrice() {
+        this.productToBuy.detailSale.map(detailSale => {
+            detailSale.subTotal = detailSale.product.price * detailSale.numberProducts;
         });
-       localStorage.setItem('shoppingCar', ret.join(','));
-      this.getProductsByIds();
-      this.notify.success('The product was removed from the shpopping cart correctly');
-      this.shopping.update();
+        let sum = 0;
+        this.productToBuy.detailSale.forEach(detail => {
+            sum += detail.subTotal;
+        });
+        this.productToBuy.total = sum;
+
     }
 
 }

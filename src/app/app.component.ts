@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.coutElements();
     this.onVerifyLogin();
+    this.isloggued();
     this.shopping.addtoCarEmmiter.subscribe(evet => {
       this.coutElements();
     });
@@ -41,17 +42,13 @@ export class AppComponent implements OnInit {
   }
 
   coutElements() {
-    if (localStorage.getItem('shoppingCar') !== null && localStorage.getItem('shoppingCar') !== '') {
-      this.numElements = localStorage.getItem('shoppingCar').split(',').length;
-    } else {
-      this.numElements = 0;
-    }
+    this.numElements = this.shopping.coutElements();
   }
 
   onVerifyLogin() {
 
-    if (localStorage.getItem('currentUser') !== null) {
-      this.userLogin = JSON.parse(localStorage.getItem('currentUser'));
+    if (this.authService.isLogged()) {
+      this.userLogin = this.authService.getUserLogged();
       this.isAdmin = this.userLogin.role === 'ADMIN' ? true : false;
     } else {
       this.userLogin = null;
@@ -63,5 +60,9 @@ export class AppComponent implements OnInit {
   onLogout() {
     this.authService.logOut();
     this.router.navigate(['/Home']);
+  }
+
+  isloggued() {
+    this.isLogged = this.authService.isLogged();
   }
 }

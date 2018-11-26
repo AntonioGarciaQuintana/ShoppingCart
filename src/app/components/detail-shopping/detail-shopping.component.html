@@ -1,3 +1,4 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a routerLink="/Home">Home</a></li>
     <li class="breadcrumb-item">Detail shopping cart</li>
@@ -9,6 +10,8 @@
     <div class="row">
         <div class="col-lg-10 mb-1">
             <div class=" mb-2">
+                    <!-- <button class="btn btn-primary"  style="float: right" (click)="deleteAll()"> delete all</button> -->
+                 
                 <button class="btn btn-primary" *ngIf="productToBuy?.detailSale?.length > 0" style="float: right"
                     (click)="openConfirmationModal(confirmationModal)"><i class="fa fa-shopping-cart" aria-hidden="true"></i>
                     Buy Now</button>
@@ -19,22 +22,29 @@
     <div class="row">
         <table class="table">
             <thead>
-                <tr>
+                <tr style="text-align: center">
                     <th scope="col">Product</th>
                     <th scope="col">Nombre</th>
+                    <th scope="col">Price</th>
                     <th scope="col">No.</th>
-                    <th scope="col">SubTotal ${{productToBuy?.total}}</th>
+                    <th scope="col">SubTotal {{productToBuy?.total | currency }}</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let data of productToBuy?.detailSale">
-                    <th> <img class="rounded mx-auto d-block" style="width: 19%; height: 50%" src="data:image/JPEG;base64,{{ data.product.imageUrl }}"
+                <tr *ngFor="let data of productToBuy?.detailSale;let i =index" style="text-align: center">
+                    <th> <img class="rounded mx-auto d-block" style="width: 37%; height: 50%" src="data:image/JPEG;base64,{{ data.product.imageUrl }}"
                             alt=""> </th>
                     <td>{{ data.product.name }}</td>
-                    <td>{{ data.numberProducts}}</td>
+                    <td>{{ data.unitCost  | currency }}</td>
+                    <td><div style="text-align: center">
+                            <i class="fa fa-minus-square" aria-hidden="true" (click)="onRest(data)" style="color:red; cursor: pointer;"></i>
+                            <input type="text" name="numerProducts" appOnlyNumbers  [aceptDecimal]="false" class="col-md-4"   [(ngModel)]="data.numberProducts" (ngModelChange)="onChangeNumberProducts($event,data.product)" style="text-align: center"/>
+                            <i class="fa fa-plus-square" aria-hidden="true"(click)="onSum(data)" style="color:green;cursor: pointer;"></i>
+                        </div></td>
+                    <!-- <td>{{ data.numberProducts }}</td> -->
                     <td>{{ data.subTotal | currency }}</td>
-                    <td><button (click)="deleteProductOfCar(data);" class="btn btn-danger btn-xs"
+                    <td><button (click)="deleteProductOfCar(data.product);" class="btn btn-danger btn-xs"
                             data-title="Eliminar"><span class="fa fa-trash"></span></button></td>
                 </tr>
             </tbody>

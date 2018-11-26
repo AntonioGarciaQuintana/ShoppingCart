@@ -1,3 +1,4 @@
+import { DetailSale } from './../../model/detai-sale';
 import { Component, OnInit, TemplateRef, EventEmitter, Output } from '@angular/core';
 import { ApiService } from '../../commons/services/api-service.service';
 import { Product } from '../../model/product';
@@ -16,11 +17,13 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 export class HomeComponent implements OnInit {
 
     products: Product[] = [];
+    shoppingCart: DetailSale[] = [];
     categories: any[] = [];
     urlProductController = '/product';
     modalRef: NgbModalRef;
     productSelected: Product;
     productAdded = new EventEmitter();
+    numersProducrts = 1;
 
     // pagination properties
     currentPage = 0;
@@ -133,6 +136,7 @@ export class HomeComponent implements OnInit {
 
 
     openModalConfirmation(productSelected: Product, content) {
+        this.numersProducrts = 1;
         this.productSelected = productSelected;
         this.modalRef = this.modalService.open(content, { size: 'lg' });
         this.modalRef.result.then((result) => {
@@ -162,18 +166,20 @@ export class HomeComponent implements OnInit {
 
 
     addToCar(product: Product) {
-        if (localStorage.getItem('shoppingCar') == null) {
-            localStorage.setItem('shoppingCar',  product.id + '' );
-        } else {
-            const ids = localStorage.getItem('shoppingCar');
-            localStorage.setItem('shoppingCar',   ids + ',' + product.id  );
-        }
-        this.shopping.update();
-
+        this.shopping.addToCar(product, this.numersProducrts);
         this.closeModal();
         this.notify.success('was add to shopping car the product: ' + product.name);
     }
 
-
+    onRest() {
+        if (this.numersProducrts > 1) {
+            this.numersProducrts--;
+        }
+    }
+    onSum() {
+        if (this.numersProducrts < 999 ) {
+            this.numersProducrts++;
+        }
+    }
 
 }
